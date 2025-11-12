@@ -8,18 +8,41 @@ import ThemedView from "../../components/ThemeView";
 import ThemedTitle from "../../components/ThemedTitle";
 import Spacer from "../../components/Spacer";
 import ThemedText from "../../components/ThemedText";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 import { colors } from "../../constants/Colors";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedTextInput from "../../components/ThemedTextInput";
 import { useState } from "react";
+import { useUser } from "../../hooks/useUser";
 
 export default function login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  function handleSubmit() {
-    console.log("Hello login");
+
+  const [error, setError] = useState(null);
+
+  // const {user, }
+
+  const { user, login } = useUser();
+
+  const router = useRouter();
+
+  async function handleSubmit() {
+    // console.log("Hello signup");
+    // console.log("current user", user);
+
+    setError(null);
+
+    try {
+      await login({ email, password });
+      console.log("current user is:", user);
+
+      router.push("/post");
+    } catch (error: any) {
+      // console.log(error.message);
+      setError(error.message);
+    }
   }
 
   return (
@@ -43,6 +66,10 @@ export default function login() {
           value={password}
           secureTextEntry
         />
+
+        <Spacer />
+
+        {error && <Text style={styles.error}>{error}</Text>}
 
         <Spacer height={25} />
 
@@ -90,5 +117,13 @@ const styles = StyleSheet.create({
   link: {
     // color: "#7045FF",
     fontWeight: 900,
+  },
+  error: {
+    color: colors.light.status.error,
+
+    borderColor: colors.light.status.error,
+    borderWidth: 1,
+    borderRadius: 6,
+    padding: 4
   },
 });

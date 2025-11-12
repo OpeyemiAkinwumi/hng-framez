@@ -10,20 +10,39 @@ import ThemedView from "../../components/ThemeView";
 import ThemedTitle from "../../components/ThemedTitle";
 import Spacer from "../../components/Spacer";
 import ThemedText from "../../components/ThemedText";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 
 import { colors } from "../../constants/Colors";
 import ThemedButton from "../../components/ThemedButton";
 import ThemedTextInput from "../../components/ThemedTextInput";
 import { useState } from "react";
+import { useUser } from "../../hooks/useUser";
 
 export default function signup() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPass, setConfirmPass] = useState("");
 
-  function handleSubmit() {
-    console.log("Hello signup");
+  const [error, setError] = useState(null);
+
+  const { user, signup } = useUser();
+
+  const router = useRouter();
+
+  async function handleSubmit() {
+    // console.log("Hello signup");
+    // console.log("current user", user);
+    setError(null);
+    try {
+      await signup({ email, password, name });
+      console.log("current user is:", user);
+
+      router.push("/login");
+    } catch (error: any) {
+      // console.log(error.message);
+      setError(error.message);
+    }
   }
 
   return (
@@ -32,6 +51,15 @@ export default function signup() {
         <ThemedTitle styles={styles.title}>Create your Account</ThemedTitle>
 
         <Spacer />
+
+        <ThemedTextInput
+          placeholder="Name"
+          keyboardType="email-address"
+          onChangeText={setName}
+          value={name}
+        />
+
+        <Spacer height={10} />
 
         <ThemedTextInput
           placeholder="Email"
@@ -57,6 +85,10 @@ export default function signup() {
           value={confirmPass}
           secureTextEntry
         />
+
+        <Spacer />
+
+        {error && <Text style={styles.error}>{error}</Text>}
 
         <Spacer height={25} />
 
@@ -104,5 +136,13 @@ const styles = StyleSheet.create({
   link: {
     // color: "#7045FF",
     fontWeight: 900,
+  },
+  error: {
+    color: colors.light.status.error,
+
+    borderColor: colors.light.status.error,
+    borderWidth: 1,
+    borderRadius: 6,
+    padding: 4,
   },
 });

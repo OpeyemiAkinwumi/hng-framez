@@ -1,10 +1,12 @@
 import { Stack } from "expo-router";
 import { StyleSheet } from "react-native";
+import { UserProvider } from "../contexts/UserProvider";
 
 export default function RootLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      {/* <Stack.Screen
+    <UserProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        {/* <Stack.Screen
         name="index"
         options={{ title: "Home", headerShown: false }}
       />
@@ -16,7 +18,8 @@ export default function RootLayout() {
         name="login"
         options={{ title: "Log in", headerShown: false }}
       /> */}
-    </Stack>
+      </Stack>
+    </UserProvider>
   );
 }
 

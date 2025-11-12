@@ -37,7 +37,6 @@ export default function HomeScreen() {
 
       <Spacer height={5} />
       <ButtonLink bg="#4B4B4B" title="Login" href="/login" color="#F5F7F4" />
-      <ButtonLink bg="#4B4B4B" title="create" href="/create" color="#F5F7F4" />
     </ThemedView>
   );
 }
