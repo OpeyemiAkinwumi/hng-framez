@@ -25,25 +25,45 @@ export default function Profile() {
 
   console.log(userData);
 
+  // useEffect(() => {
+  //   async function loadPosts() {
+  //     setIsLoading(true);
+  //     await fetchPosts(); // fetch all posts first
+
+  //     const currentUserId = auth.currentUser?.uid; // ✅ current user's UID
+
+  //     if (!currentUserId) return;
+
+  //     // Filter posts where the post's authorId matches the current user
+  //     const filteredPosts = posts.filter(
+  //       (post) => post.authorId === currentUserId
+  //     );
+  //     setUserPosts(filteredPosts);
+  //     setIsLoading(false);
+  //   }
+
+  //   loadPosts();
+  // }, []);
   useEffect(() => {
     async function loadPosts() {
       setIsLoading(true);
       await fetchPosts(); // fetch all posts first
-
-      const currentUserId = auth.currentUser?.uid; // ✅ current user's UID
-
-      if (!currentUserId) return;
-
-      // Filter posts where the post's authorId matches the current user
-      const filteredPosts = posts.filter(
-        (post) => post.authorId === currentUserId
-      );
-      setUserPosts(filteredPosts);
       setIsLoading(false);
     }
 
     loadPosts();
   }, []);
+
+  // 🧠 Separate effect for filtering when posts or userData changes
+  useEffect(() => {
+    const currentUserId = auth.currentUser?.uid;
+    if (!currentUserId) return;
+
+    const filteredPosts = posts.filter(
+      (post) => post.authorId === currentUserId
+    );
+    setUserPosts(filteredPosts);
+  }, [posts, userData]);
 
   async function handleLogout() {
     setError(null);
@@ -72,6 +92,7 @@ export default function Profile() {
       ) : (
         <FlatList
           data={userPosts}
+          style={{ width: "100%" }}
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 50 }}
           renderItem={({ item }) => (

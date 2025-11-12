@@ -3,7 +3,7 @@ import ThemedView from "../../../components/ThemeView";
 import ThemedTitle from "../../../components/ThemedTitle";
 import Spacer from "../../../components/Spacer";
 
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import ThemedText from "../../../components/ThemedText";
 import { useEffect, useState } from "react";
 import { usePost } from "../../../hooks/usePost";
@@ -17,7 +17,10 @@ import ThemedButton from "../../../components/ThemedButton";
 
 export default function PostDetails() {
   const [posts, setPost] = useState<Post | null>(null);
+  //   const [isDeleting, setIsDeleting] = useState(false);
   const { id } = useLocalSearchParams();
+
+  const router = useRouter();
 
   const { toggleLike, deletePost } = usePost();
 
@@ -51,6 +54,8 @@ export default function PostDetails() {
 
   async function handleDeletePost() {
     await deletePost(postId);
+
+    router.replace("/post");
   }
 
   return (
