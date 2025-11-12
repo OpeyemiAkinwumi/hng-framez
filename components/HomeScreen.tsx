@@ -3,10 +3,12 @@ import { Image, StyleSheet, Text, useColorScheme, View } from "react-native";
 import ButtonLink from "./ButtonLink";
 import Spacer from "./Spacer";
 import { colors } from "../constants/Colors";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import ThemedView from "./ThemeView";
 import ThemedText from "./ThemedText";
 import ThemedTitle from "./ThemedTitle";
+import { useUser } from "../hooks/useUser";
+import { useEffect } from "react";
 
 export default function HomeScreen() {
   return (

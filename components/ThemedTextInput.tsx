@@ -14,6 +14,7 @@ type ThemeProps = {
   onChangeText?: (text: string) => void;
   value: string;
   secureTextEntry?: boolean;
+  multiline?: boolean;
 };
 
 export default function ThemedTextInput({
@@ -23,6 +24,7 @@ export default function ThemedTextInput({
   onChangeText,
   value,
   secureTextEntry,
+  multiline,
   ...props
 }: ThemeProps) {
   const colorScheme = useColorScheme();
@@ -36,6 +38,7 @@ export default function ThemedTextInput({
       onChangeText={onChangeText}
       value={value}
       secureTextEntry
+      multiline={multiline}
       {...props}
       placeholderTextColor={theme.text.secondary}
       style={[

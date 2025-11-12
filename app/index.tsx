@@ -6,7 +6,7 @@ import HomeScreen from "../components/HomeScreen";
 // SplashScreen.preventAutoHideAsync();
 
 export default function Home() {
-  const [isShowSplash, setIsShowSplash] = useState(false);
+  const [isShowSplash, setIsShowSplash] = useState(true);
 
   //   const [loaded, error] = useFonts({
   //     "Montserrat-black": require("../assets/fonts/Montserrat-Black.ttf"),
@@ -29,7 +29,7 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       setIsShowSplash(false);
-    }, 3000);
+    }, 5000);
   });
 
   return isShowSplash ? <SplashScreen /> : <HomeScreen />;

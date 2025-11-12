@@ -10,6 +10,7 @@ import { colors } from "../constants/Colors";
 type ThemeViewProps = {
   styles?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
+  disabled?: boolean;
   onPress: () => void;
 };
 
@@ -17,6 +18,7 @@ export default function ThemedButton({
   styles,
   children,
   onPress,
+  disabled,
   ...props
 }: ThemeViewProps) {
   const colorScheme = useColorScheme();

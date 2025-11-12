@@ -38,7 +38,7 @@ export default function login() {
       await login({ email, password });
       console.log("current user is:", user);
 
-      router.push("/post");
+      router.replace("/post");
     } catch (error: any) {
       // console.log(error.message);
       setError(error.message);
@@ -124,6 +124,6 @@ const styles = StyleSheet.create({
     borderColor: colors.light.status.error,
     borderWidth: 1,
     borderRadius: 6,
-    padding: 4
+    padding: 4,
   },
 });

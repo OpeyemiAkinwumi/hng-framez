@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { StyleSheet } from "react-native";
 import { UserProvider } from "../contexts/UserProvider";
+import { PostProvider } from "../contexts/PostProvider";
 
 export default function RootLayout() {
   return (
