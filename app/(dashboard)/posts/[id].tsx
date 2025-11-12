@@ -13,12 +13,13 @@ import ThemedCard from "../../../components/ThemeCard";
 import { Ionicons } from "@expo/vector-icons";
 import { auth } from "../../../FirebaseConfig";
 import ThemedLoader from "../../../components/ThemedLoader";
+import ThemedButton from "../../../components/ThemedButton";
 
 export default function PostDetails() {
   const [posts, setPost] = useState<Post | null>(null);
   const { id } = useLocalSearchParams();
 
-  const { toggleLike } = usePost();
+  const { toggleLike, deletePost } = usePost();
 
   const user = auth.currentUser;
   const isLiked = user ? posts?.likedBy?.includes(user.uid) : false;
@@ -28,6 +29,9 @@ export default function PostDetails() {
   const postId = Array.isArray(id) ? id[0] : id;
 
   const { fetchPostById } = usePost();
+
+  // ✅ Check if the current user is the author of this post
+  const isAuthor = user && posts?.authorId === user.uid;
 
   useEffect(() => {
     async function getPost() {
@@ -41,10 +45,12 @@ export default function PostDetails() {
     getPost();
   }, [postId]);
 
-  console.log("This is the post", posts);
-
   if (!posts) {
     return <ThemedLoader />;
+  }
+
+  async function handleDeletePost() {
+    await deletePost(postId);
   }
 
   return (
@@ -80,6 +86,21 @@ export default function PostDetails() {
         </Pressable>
       </ThemedCard>
       <Spacer />
+
+      {/* 🗑️ Delete button (only for author) */}
+      {isAuthor && (
+        <ThemedButton styles={styles.delete} onPress={handleDeletePost}>
+          <ThemedText
+            styles={{
+              color: colors.light.text.primary,
+              textAlign: "center",
+              fontWeight: "700",
+            }}
+          >
+            Delete
+          </ThemedText>
+        </ThemedButton>
+      )}
     </ThemedView>
   );
 }
@@ -101,7 +122,7 @@ const styles = StyleSheet.create({
   delete: {
     marginTop: 40,
     backgroundColor: colors.dark.status.error,
-    width: 200,
+    width: "100%",
     alignSelf: "center",
   },
   likeButton: {

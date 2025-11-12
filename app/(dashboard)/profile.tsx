@@ -11,10 +11,12 @@ import { usePost } from "../../hooks/usePost";
 import { Post } from "../../contexts/PostContext";
 import { auth } from "../../FirebaseConfig";
 import ThemedCard from "../../components/ThemeCard";
+import ThemedLoader from "../../components/ThemedLoader";
 
 export default function Profile() {
   const [error, setError] = useState<string | null>(null);
   const [userPosts, setUserPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { userData, logout } = useUser();
   const { posts, fetchPosts } = usePost();
@@ -25,6 +27,7 @@ export default function Profile() {
 
   useEffect(() => {
     async function loadPosts() {
+      setIsLoading(true);
       await fetchPosts(); // fetch all posts first
 
       const currentUserId = auth.currentUser?.uid; // ✅ current user's UID
@@ -36,6 +39,7 @@ export default function Profile() {
         (post) => post.authorId === currentUserId
       );
       setUserPosts(filteredPosts);
+      setIsLoading(false);
     }
 
     loadPosts();
@@ -63,24 +67,28 @@ export default function Profile() {
         Your Posts:
       </ThemedText>
 
-      <FlatList
-        data={userPosts}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 50 }}
-        renderItem={({ item }) => (
-          <ThemedCard styles={styles.postCard}>
-            <ThemedText styles={{ fontWeight: 600 }}>{item.title}</ThemedText>
-            <ThemedText>{item.content}</ThemedText>
-            <ThemedText
-              styles={{ fontStyle: "italic", fontSize: 12, marginTop: 4 }}
-            >
-              {item.created_at?.toDate
-                ? item.created_at.toDate().toLocaleString()
-                : ""}
-            </ThemedText>
-          </ThemedCard>
-        )}
-      />
+      {isLoading ? (
+        <ThemedLoader />
+      ) : (
+        <FlatList
+          data={userPosts}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={{ paddingBottom: 50 }}
+          renderItem={({ item }) => (
+            <ThemedCard styles={styles.postCard}>
+              <ThemedText styles={{ fontWeight: 600 }}>{item.title}</ThemedText>
+              <ThemedText>{item.content}</ThemedText>
+              <ThemedText
+                styles={{ fontStyle: "italic", fontSize: 12, marginTop: 4 }}
+              >
+                {item.created_at?.toDate
+                  ? item.created_at.toDate().toLocaleString()
+                  : ""}
+              </ThemedText>
+            </ThemedCard>
+          )}
+        />
+      )}
 
       {error && <ThemedText styles={styles.error}>{error}</ThemedText>}
 

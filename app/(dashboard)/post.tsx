@@ -16,7 +16,7 @@ import { auth } from "../../FirebaseConfig";
 export default function profile() {
   const { posts, toggleLike } = usePost();
 
-  // console.log(posts);
+
 
   const router = useRouter();
 
