@@ -66,6 +66,12 @@ export default function DashboardLayout() {
               ),
             }}
           />
+          <Tabs.Screen
+            name="posts/[id]"
+            options={{
+              href: null, // does not display the icon on the tabs panel
+            }}
+          />
         </Tabs>
       </UserOnly>
     </PostProvider>

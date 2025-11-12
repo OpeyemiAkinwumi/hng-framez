@@ -16,7 +16,7 @@ import { auth } from "../../FirebaseConfig";
 export default function profile() {
   const { posts, toggleLike } = usePost();
 
-  console.log(posts);
+  // console.log(posts);
 
   const router = useRouter();
 
@@ -24,7 +24,7 @@ export default function profile() {
     <ThemedView styles={styles.container} safe={true}>
       <Spacer />
       <ThemedTitle styles={styles.title}>Feeds</ThemedTitle>
-      <Spacer />
+      {/* <Spacer /> */}
       {/* <FlatList
         data={posts}
         style={{ width: "100%" }}
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "flex-start",
     // justifyContent: "center",
-    paddingBottom: 70,
+    paddingBottom: 30,
   },
   title: {
     fontSize: 24,
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   list: {
-    marginTop: 40,
+    marginTop: 30,
   },
   meta: { fontSize: 12, opacity: 0.7, marginTop: 8 },
   card: {
@@ -125,20 +125,9 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     display: "flex",
   },
-  // list: {
-  //   paddingBottom: 50,
-  // },
-  // card: {
-  //   padding: 16,
-  //   marginVertical: 8,
-  //   borderRadius: 12,
-  //   backgroundColor: "#fff",
-  //   position: "relative", // make like button absolute relative to this
-  // },
+
   likeButton: {
-    // display: "flex",
-    // justifyContent: "center",
-    // alignItems: "center",
+
     position: "absolute",
     bottom: 20,
     right: 20,

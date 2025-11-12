@@ -11,6 +11,7 @@ export type Post = {
   likes?: number;
   media?: string[];
   likedBy?: string[];
+  authorId?: string;
 };
 
 export type PostContextType = {
