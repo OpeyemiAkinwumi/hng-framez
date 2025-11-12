@@ -10,8 +10,8 @@ export type Post = {
   comment?: string[];
   likes?: number;
   media?: string[];
+  likedBy?: string[];
 };
-
 
 export type PostContextType = {
   posts: Post[];
@@ -19,6 +19,7 @@ export type PostContextType = {
   fetchPostById: (id: string) => Promise<Post | null>;
   createPost: (title: string, content: string) => Promise<void>;
   deletePost: (id: string) => Promise<void>;
+  toggleLike: (postId: string, likedBy?: string[]) => Promise<void>;
 };
 
 export const PostContext = createContext<PostContextType | null>(null);

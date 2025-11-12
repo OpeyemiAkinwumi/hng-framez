@@ -9,10 +9,12 @@ import { colors } from "../../constants/Colors";
 import { useRouter } from "expo-router";
 import { Post } from "../../contexts/PostContext";
 import { formatTimeAgo } from "../../utils/utils";
+import { Ionicons } from "@expo/vector-icons";
+import { auth } from "../../FirebaseConfig";
 // import { FlatList } from "react-native/types_generated/index";
 
 export default function profile() {
-  const { posts } = usePost();
+  const { posts, toggleLike } = usePost();
 
   console.log(posts);
 
@@ -22,10 +24,8 @@ export default function profile() {
     <ThemedView styles={styles.container} safe={true}>
       <Spacer />
       <ThemedTitle styles={styles.title}>Feeds</ThemedTitle>
-
       <Spacer />
-
-      <FlatList
+      {/* <FlatList
         data={posts}
         style={{ width: "100%" }}
         keyExtractor={(item) => item.id ?? Math.random().toString()} // ✅ always string
@@ -43,6 +43,53 @@ export default function profile() {
             </ThemedCard>
           </Pressable>
         )}
+      /> */}
+      // ✅ Render FlatList with heart icon
+      <FlatList
+        data={posts}
+        style={{ width: "100%" }}
+        keyExtractor={(item) => item.id ?? Math.random().toString()}
+        contentContainerStyle={styles.list}
+        renderItem={({ item }) => {
+          const user = auth.currentUser;
+          const isLiked = user ? item.likedBy?.includes(user.uid) : false;
+          const likeCount = item.likedBy?.length || 0;
+
+          return (
+            <View style={{ width: "100%" }}>
+              <Pressable
+                style={{ width: "100%" }}
+                onPress={() => router.push(`/posts/${item.id}`)}
+              >
+                <ThemedCard styles={styles.card}>
+                  <ThemedTitle styles={styles.title}>{item.title}</ThemedTitle>
+                  <ThemedText styles={{ marginVertical: 2, fontWeight: "500" }}>
+                    {item.content}
+                  </ThemedText>
+                  <ThemedText styles={{ fontStyle: "italic" }}>
+                    Written by {item.authorName}
+                  </ThemedText>
+                  <ThemedText>{formatTimeAgo(item.created_at)}</ThemedText>
+                </ThemedCard>
+              </Pressable>
+
+              <ThemedText styles={[{ fontStyle: "italic" }, styles.likeLength]}>
+                {likeCount > 0 ? likeCount : ""}
+              </ThemedText>
+              {/* ❤️ Like button at bottom-right */}
+              <Pressable
+                style={styles.likeButton}
+                onPress={() => toggleLike(item.id, item.likedBy)}
+              >
+                <Ionicons
+                  name={isLiked ? "heart" : "heart-outline"}
+                  size={18}
+                  color={isLiked ? "red" : "gray"}
+                />
+              </Pressable>
+            </View>
+          );
+        }}
       />
     </ThemedView>
   );
@@ -77,6 +124,31 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.light.primary.dark,
     borderLeftWidth: 4,
     display: "flex",
+  },
+  // list: {
+  //   paddingBottom: 50,
+  // },
+  // card: {
+  //   padding: 16,
+  //   marginVertical: 8,
+  //   borderRadius: 12,
+  //   backgroundColor: "#fff",
+  //   position: "relative", // make like button absolute relative to this
+  // },
+  likeButton: {
+    // display: "flex",
+    // justifyContent: "center",
+    // alignItems: "center",
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    zIndex: 99,
+  },
+  likeLength: {
+    position: "absolute",
+    bottom: 20,
+    right: 45,
+    zIndex: 99,
   },
   // title: {
   //   fontSize: 20,
